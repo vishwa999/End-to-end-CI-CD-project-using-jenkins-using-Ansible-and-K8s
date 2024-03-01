@@ -1,15 +1,13 @@
 
 pipeline{
         agent {
-           docker {
-            image 'maven'
-            args '-v $HOME/.m2:/root/.m2'
-           }
-        }
+                docker {
+                image 'maven'
+                args '-v $HOME/.m2:/root/.m2'
+                }
+             }
        
         stages{
-
-
               stage('Quality Gate Statuc Check'){
 
                   steps{
@@ -21,9 +19,9 @@ pipeline{
                       def qg = waitForQualityGate()
                       if (qg.status != 'OK') {
                            error "Pipeline aborted due to quality gate failure: ${qg.status}"
-                      }
-                    }
-		    sh "mvn clean install"
+                         }
+                        }
+		                   sh "mvn clean install"
                   }
                 }  
               }
