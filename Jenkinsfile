@@ -12,7 +12,7 @@ pipeline{
 
                   steps{
                       script{
-                      withSonarQubeEnv('sonar-secrate') { 
+                      withSonarQubeEnv('sonarserver') { 
                       sh "mvn sonar:sonar"
                        }
                       timeout(time: 1, unit: 'HOURS') {
