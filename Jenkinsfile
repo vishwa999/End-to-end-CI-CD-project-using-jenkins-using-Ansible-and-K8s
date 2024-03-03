@@ -1,15 +1,14 @@
 
 def getDockerTag(){
-  def tag = sh script: 'git rev-parse HEAD' , returnstdout:true
+  def tag = sh script: 'git rev-parse HEAD', returnStdout: true
   return tag
 }
 pipeline{
         
            agent any
-
-            environment(
-              Docker_tag = getDockerTag()
-            )
+           environment{
+	           Docker_tag = getDockerTag()
+        }
        
         stages{
               stage('Quality Gate Statuc Check'){
