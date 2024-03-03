@@ -38,7 +38,6 @@ pipeline{
               stage("Build Docker image"){
                 steps{
                   script{
-                       sh 'cp -r ../End_to_End/target .'
                        sh 'docker build . -t ski00026/end-to-end-k8s:Docker_tag'
                        withCredentials([string(credentialsId: 'Docker_hub', variable: 'DockerHubPassword')]) {
                                        sh 'docker login -u ski00026 -p $DockerHubPassword'
