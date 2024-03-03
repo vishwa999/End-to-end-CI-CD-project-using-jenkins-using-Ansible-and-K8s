@@ -40,10 +40,10 @@ pipeline{
                 steps{
                   script{
                        sh 'cp -r ../End_to_End/target .'
-                       docker build . -t ski00026/end-to-end-k8s:Docker_tag
+                       sh 'docker build . -t ski00026/end-to-end-k8s:Docker_tag'
                        withCredentials([string(credentialsId: 'Docker_hub', variable: 'DockerHubPassword')]) {
-                                       docker login -u ski00026 -p $DockerHubPassword
-                                      docker push ski00026/end-to-end-k8s:Docker_tag
+                                       sh 'docker login -u ski00026 -p $DockerHubPassword'
+                                      sh 'docker push ski00026/end-to-end-k8s:Docker_tag'
                                   }
                        
                   }
