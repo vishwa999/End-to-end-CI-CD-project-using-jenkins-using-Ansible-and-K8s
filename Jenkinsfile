@@ -11,7 +11,7 @@ pipeline{
         }
        
         stages{
-              stage('Quality Gate Statuc Check'){
+                 stage('Quality Gate Statuc Check'){
                    agent {
                         docker {
                                 image 'maven'
@@ -32,24 +32,30 @@ pipeline{
                            }
                         }
 		                    sh "mvn clean install"
-                  }
-                }  
-              }
-              stage("Build Docker image"){
+                    }
+                 }  
+                }
+               stage("Build Docker image"){
                 steps{
                   script{
-                       sh 'docker build . -t ski00026/end-to-end-k8s:Docker_tag'
+                       sh 'docker build . -t ski00026/end-to-end-k8s:$Docker_tag'
                        withCredentials([string(credentialsId: 'Docker_hub', variable: 'DockerHubPassword')]) {
                                        sh 'docker login -u ski00026 -p $DockerHubPassword'
                                       sh 'docker push ski00026/end-to-end-k8s:Docker_tag'
                                   }
                        
-                  }
-                }
-              }
-
-
-	
-      }
-      
-    }
+                   }
+                 }
+               }
+             stage('ansible playbook'){
+			          steps{
+			 	            script{
+				               sh '''final_tag=$(echo $Docker_tag | tr -d ' ')
+				               echo ${final_tag}test
+				               sed -i "s/docker_tag/$final_tag/g"  deployment.yaml
+                       '''
+				                 ansiblePlaybook become: true, installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yaml'
+				              }
+			              }
+		            }
+	   }
