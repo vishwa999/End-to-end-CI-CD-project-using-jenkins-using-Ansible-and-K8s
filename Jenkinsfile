@@ -8,7 +8,7 @@ pipeline{
            agent any
 
             environment(
-              Docker_tag = getDockerTag();
+              Docker_tag = getDockerTag()
             )
        
         stages{
