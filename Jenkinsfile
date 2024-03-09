@@ -35,27 +35,27 @@ pipeline{
                     }
                  }  
                 }
-               stage("Build Docker image"){
-                steps{
-                  script{
-                       sh 'docker build . -t ski00026/end-to-end-k8s:$Docker_tag'
-                       withCredentials([string(credentialsId: 'Docker_hub', variable: 'DockerHubPassword')]) {
-                                       sh 'docker login -u ski00026 -p $DockerHubPassword'
-                                      sh 'docker push ski00026/end-to-end-k8s:Docker_tag'
-                                  }
+            //    stage("Build Docker image"){
+            //     steps{
+            //       script{
+            //            sh 'docker build . -t ski00026/end-to-end-k8s:$Docker_tag'
+            //            withCredentials([string(credentialsId: 'Docker_hub', variable: 'DockerHubPassword')]) {
+            //                            sh 'docker login -u ski00026 -p $DockerHubPassword'
+            //                           sh 'docker push ski00026/end-to-end-k8s:Docker_tag'
+            //                       }
                        
-                   }
-                 }
-               }
-             stage('ansible playbook'){
-			          steps{
-			 	            script{
-				               sh '''final_tag=$(echo $Docker_tag | tr -d ' ')
-				               echo ${final_tag}test
-				               sed -i "s/docker_tag/$final_tag/g"  deployment.yaml
-                       '''
-				                 ansiblePlaybook become: true, installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yaml'
-				              }
-			              }
+            //        }
+            //      }
+            //    }
+            //  stage('ansible playbook'){
+			      //     steps{
+			 	    //         script{
+				    //            sh '''final_tag=$(echo $Docker_tag | tr -d ' ')
+				    //            echo ${final_tag}test
+				    //            sed -i "s/docker_tag/$final_tag/g"  deployment.yaml
+            //            '''
+				    //              ansiblePlaybook become: true, installation: 'ansible', inventory: 'hosts', playbook: 'ansible.yaml'
+				    //           }
+			      //         }
 		            }
 	   }
