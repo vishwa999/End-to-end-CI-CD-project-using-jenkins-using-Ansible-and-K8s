@@ -41,7 +41,7 @@ pipeline{
                    stage('Build and push the image to docker hub'){
                      steps{
                         script{
-                          sh 'docker build . -t ski00026\end-to-end-k8s:Docker_tag'
+                          sh 'docker build . -t ski00026/end-to-end-k8s:Docker_tag'
                           withCredentials([string(credentialsId: 'dockerPw', variable: 'dockerhubPw')]) {
                                    sh 'docker login -u ski00026 -p $dockerPw'
                                    sh 'docker push ski00026\end-to-end-k8s:Docker_tag'
