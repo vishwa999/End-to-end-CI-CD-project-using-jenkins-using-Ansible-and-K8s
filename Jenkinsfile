@@ -1,15 +1,16 @@
 
-// def getDockerTag(){
-//   def tag = sh script: 'git rev-parse HEAD', returnStdout: true
-//   return tag
-// }
+def getDockerTag(){
+  def tag = sh script: 'git rev-parse HEAD', returnStdout: true
+  return tag
+}
+
 pipeline{
         
            agent any
 
-          //  environment {
-	        //    Docker_tag = getDockerTag()
-          //  }
+           environment {
+	           Docker_tag = getDockerTag()
+           }
        
         stages{
                  stage('Quality Gate Statuc Check'){
@@ -35,6 +36,19 @@ pipeline{
 		                           sh "mvn clean install"
                              }
                          }  
+                   }
+
+                   stage('Build and push the image to docker hub'){
+                     steps{
+                        script{
+                          sh 'docker build . -t ski00026\end-to-end-k8s:Docker_tag'
+                          withCredentials([string(credentialsId: 'dockerPw', variable: 'dockerhubPw')]) {
+                                   sh 'docker login -u ski00026 -p $dockerPw'
+                                   sh 'docker push ski00026\end-to-end-k8s:Docker_tag'
+                                 }
+                          
+                        }
+                     }
                    }
              
 
