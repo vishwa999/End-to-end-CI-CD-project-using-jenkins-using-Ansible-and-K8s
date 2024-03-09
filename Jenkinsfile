@@ -1,6 +1,6 @@
 
 def getDockerTag(){
-  def tag = sh script: 'git rev-parse HEAD', returnStdout: true
+  def tag = sh script: 'git rev-parse HEAD' , returnStdout:true
   return tag
 }
 
@@ -13,7 +13,7 @@ pipeline{
            }
        
         stages{
-                 stage('Quality Gate Statuc Check'){
+                 stage('Quality Gate Status Check'){
                    agent {
                              docker {
                                 image 'maven'
